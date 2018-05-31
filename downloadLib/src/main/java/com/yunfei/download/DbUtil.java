@@ -6,7 +6,7 @@ import java.util.List;
     public static BundleBean getBundleByKey(BundleBeanDao dao,String key){
 
         return dao.queryBuilder().where(BundleBeanDao.Properties.Key.eq(key))
-                .build().uniqueOrThrow();
+                .build().unique();
 
     }
     public static List<ItemBean> getFinishItemBean(ItemBeanDao dao, long bundleId){

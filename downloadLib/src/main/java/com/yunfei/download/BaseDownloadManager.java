@@ -68,9 +68,9 @@ public abstract class BaseDownloadManager extends BaseTask.OnEventListener {
             downloadQueue.add(downloadTask);
 
             //TODO 等待
-            DownEvent downEvent = new DownEvent(bundleBean.getKey());
-            downEvent.setStatus(Status.WATTING);
-            onEventListener.onEvent(downEvent);
+//            DownEvent downEvent = new DownEvent(bundleBean.getKey());
+//            downEvent.setStatus(Status.WATTING);
+            onEventListener.onEvent(downloadTask.getDownEvent());
 
 
         } else {
@@ -100,7 +100,6 @@ public abstract class BaseDownloadManager extends BaseTask.OnEventListener {
             case WATTING:
                 break;
             case DOWLOADING:
-                removeFinishTask(event);
                 break;
                 default:
                     break;

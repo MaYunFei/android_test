@@ -2,22 +2,18 @@ package com.yunfei.download;
 
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-
-public class SingleTask extends BaseTask {
+public abstract class SingleRecordTask extends BaseTask {
     private final BundleBean bundleBean;
     private final BundleBeanDao bundleBeanDao;
     private final ItemBeanDao itemBeanDao;
-    private final OkHttpClient okHttpClient;
-    private HttpTask httpTask;
+    private BaseTask task;
     private ItemBean itemBean;
 
-    public SingleTask(BundleBean bundleBean, OkHttpClient okHttpClient, BundleBeanDao bundleBeanDao, ItemBeanDao itemBeanDao) {
+    public SingleRecordTask(BundleBean bundleBean, BundleBeanDao bundleBeanDao, ItemBeanDao itemBeanDao) {
         super(bundleBean.getKey());
         this.bundleBean = bundleBean;
         this.bundleBeanDao = bundleBeanDao;
         this.itemBeanDao = itemBeanDao;
-        this.okHttpClient = okHttpClient;
     }
 
     @Override
@@ -42,9 +38,9 @@ public class SingleTask extends BaseTask {
         if (isPause()){
             return;
         }
-        httpTask = new HttpTask(itemBean.getUrl(), okHttpClient, itemBean.getUrl(), itemBean.getPath(), itemBean.getTotalSize(), itemBean.getCompletedSize());
+        task = getTask();
         //
-        httpTask.addObserver(new OnEventListener() {
+        task.addObserver(new OnEventListener() {
             @Override
             protected void onEvent(DownEvent event) {
                 dbUpdate(event);
@@ -69,16 +65,19 @@ public class SingleTask extends BaseTask {
                 }
             }
         });
-        httpTask.run();
+        task.run();
 
     }
+
+    protected abstract BaseTask getTask();
+
 
     @Override
     public void pause() {
         super.pause();
         onPause();
-        if (httpTask != null) {
-            httpTask.pause();
+        if (task != null) {
+            task.pause();
         }
     }
 

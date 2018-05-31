@@ -15,6 +15,10 @@ public abstract class BaseTask extends Observable implements ITask {
         downEvent.setStatus(Status.WATTING);
     }
 
+    public DownEvent getDownEvent() {
+        return downEvent;
+    }
+
     public String getKey() {
         return key;
     }
